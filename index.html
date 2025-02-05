@@ -6,42 +6,98 @@
   <title>Payment Receipt</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
   <style>
-    body { font-family: Arial, sans-serif; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; }
-    input, button { padding: 8px; width: 100%; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f7f9;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007BFF;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #receipt {
+      max-width: 400px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #sharePdf {
+      display: none;
+      margin-top: 20px;
+      background: #28a745;
+    }
+    #sharePdf:hover {
+      background: #218838;
+    }
   </style>
 </head>
 <body>
   <h1>Payment Receipt Form</h1>
-<form id="receiptForm">
-  <div class="form-group">
-    <label for="name">Customer Name:</label>
-    <input type="text" id="name" name="name" required />
-  </div>
-  <div class="form-group">
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" required />
-  </div>
-  <div class="form-group">
-    <label for="date">Payment Date:</label>
-    <input type="date" id="date" name="date" required />
-  </div>
-  <button type="submit">Generate PDF</button>
-</form>
+  <form id="receiptForm">
+    <div class="form-group">
+      <label for="name">Customer Name:</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" required />
+    </div>
+    <div class="form-group">
+      <label for="date">Payment Date:</label>
+      <input type="date" id="date" name="date" required />
+    </div>
+    <button type="submit">Generate PDF</button>
+  </form>
 
-<!-- Hidden receipt div for styling the receipt -->
-<div id="receipt" style="display:none; padding: 20px; border: 1px solid #ddd; margin-top: 20px;">
-  <h2>Payment Receipt</h2>
-  <p id="customerName"></p>
-  <p id="paymentAmount"></p>
-  <p id="paymentDate"></p>
-</div>
+  <div id="receipt" style="display:none;">
+    <h2>Payment Receipt</h2>
+    <p id="customerName"></p>
+    <p id="paymentAmount"></p>
+    <p id="paymentDate"></p>
+  </div>
 
-<button id="sharePdf" style="display:none; margin-top: 20px;">Share PDF</button>
-
+  <button id="sharePdf">Share PDF</button>
 
   <script src="app.js"></script>
 </body>
