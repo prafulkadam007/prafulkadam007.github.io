@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Receipt</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; }
+    input, button { padding: 8px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Payment Receipt Form</h1>
+<form id="receiptForm">
+  <div class="form-group">
+    <label for="name">Customer Name:</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div class="form-group">
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" required />
+  </div>
+  <div class="form-group">
+    <label for="date">Payment Date:</label>
+    <input type="date" id="date" name="date" required />
+  </div>
+  <button type="submit">Generate PDF</button>
+</form>
+
+<!-- Hidden receipt div for styling the receipt -->
+<div id="receipt" style="display:none; padding: 20px; border: 1px solid #ddd; margin-top: 20px;">
+  <h2>Payment Receipt</h2>
+  <p id="customerName"></p>
+  <p id="paymentAmount"></p>
+  <p id="paymentDate"></p>
+</div>
+
+<button id="sharePdf" style="display:none; margin-top: 20px;">Share PDF</button>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
