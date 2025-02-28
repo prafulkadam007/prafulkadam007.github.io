@@ -38,9 +38,11 @@ document.getElementById('receiptForm').addEventListener('submit', async function
         idType: document.getElementById('idType').value,
         idNumber: document.getElementById('idNumber').value,
         amount: document.getElementById('amount').value,
-        towards: document.getElementById('towards').value,
+        towards: 'Donation',
         paymentMode: document.getElementById('paymentMode').value,
-        transactionDetails: document.getElementById('transactionDetails').value,
+        transactionDetails: document.getElementById('paymentMode').value === 'Online' 
+            ? document.getElementById('transactionDetails').value 
+            : '',
         remarks: document.getElementById('remarks').value,
         date: new Date(document.getElementById('date').value).toLocaleDateString('en-IN')
     };
@@ -61,22 +63,29 @@ document.getElementById('receiptForm').addEventListener('submit', async function
     
     document.getElementById('receipt').style.display = 'block';
 
-    // Generate PDF
+    // Generate PDF with optimized settings
     const receipt = document.getElementById('receipt');
     const { jsPDF } = window.jspdf;
 
     html2canvas(receipt, {
         useCORS: true,
-        scale: 2,
+        scale: 1.5,         // Reduced from 2 to 1.5
         logging: false,
         imageTimeout: 0,
         windowWidth: 800,
-        windowHeight: 1123 // A4 height at 96 DPI
+        windowHeight: 1123,
+        backgroundColor: '#ffffff',
+        removeContainer: true,
+        letterRendering: true,
+        allowTaint: false,
+        quality: 0.95,      // Slightly reduced quality
+        compress: true      // Enable compression
     }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL('image/jpeg', 0.8); // Changed to JPEG with 0.8 quality
         const pdf = new jsPDF({
             format: 'a4',
-            unit: 'mm'
+            unit: 'mm',
+            compress: true
         });
         
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -89,13 +98,15 @@ document.getElementById('receiptForm').addEventListener('submit', async function
         // If image height is greater than page height, scale down
         if (imgHeight > pageHeight - 20) {
             const scale = (pageHeight - 20) / imgHeight;
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth * scale, pageHeight - 20);
+            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth * scale, pageHeight - 20, undefined, 'FAST');
         } else {
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight, undefined, 'FAST');
         }
         
-        // Save PDF
-        const pdfBlob = pdf.output('blob');
+        // Save PDF with compression
+        const pdfBlob = pdf.output('blob', {
+            compress: true
+        });
         const file = new File([pdfBlob], 'Payment_Receipt.pdf', { type: 'application/pdf' });
 
         // Show Share button
@@ -121,4 +132,16 @@ document.getElementById('receiptForm').addEventListener('submit', async function
         // Automatically download the PDF
         pdf.save('Payment_Receipt.pdf');
     });
+});
+
+document.getElementById('paymentMode').addEventListener('change', function() {
+    const transactionDetailsGroup = document.getElementById('transactionDetailsGroup');
+    if (this.value === 'Online') {
+        transactionDetailsGroup.style.display = 'block';
+        document.getElementById('transactionDetails').required = true;
+    } else {
+        transactionDetailsGroup.style.display = 'none';
+        document.getElementById('transactionDetails').required = false;
+        document.getElementById('transactionDetails').value = '';
+    }
 });
