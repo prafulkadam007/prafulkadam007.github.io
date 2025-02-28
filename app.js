@@ -76,50 +76,42 @@ document.getElementById('receiptForm').addEventListener('submit', async function
         // Adjust settings based on device
         const scaleValue = isMobile ? 1 : 1.5;
         
-        // Generate PDF with optimized settings
+        // Generate PDF with proper scaling
         const receipt = document.getElementById('receipt');
         const { jsPDF } = window.jspdf;
 
-        const canvas = await html2canvas(receipt, {
+        html2canvas(receipt, {
+            scale: 2, // Increased scale for better quality
             useCORS: true,
-            scale: scaleValue,
             logging: false,
-            imageTimeout: 0,
-            windowWidth: isMobile ? window.innerWidth : 800,
-            windowHeight: isMobile ? window.innerHeight : 1123,
             backgroundColor: '#ffffff',
-            removeContainer: true,
-            letterRendering: true,
-            allowTaint: false,
-            quality: 0.95,
-            compress: true
+            width: receipt.offsetWidth,
+            height: receipt.offsetHeight,
+            windowWidth: 900 // Force wider canvas
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/jpeg', 1.0); // Increased quality
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            
+            // Calculate dimensions to use full page width with margins
+            const margin = 10; // 10mm margin
+            const imgWidth = pageWidth - (margin * 2);
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Center the image if it's shorter than page height
+            const yPosition = imgHeight < (pageHeight - (margin * 2)) 
+                ? (pageHeight - imgHeight) / 2 
+                : margin;
+            
+            pdf.addImage(imgData, 'JPEG', margin, yPosition, imgWidth, imgHeight);
+            pdf.save('Payment_Receipt.pdf');
         });
-
-        const imgData = canvas.toDataURL('image/jpeg', 0.8);
-        const pdf = new jsPDF({
-            format: 'a4',
-            unit: 'mm',
-            compress: true
-        });
-        
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        
-        // Calculate dimensions to fit page while maintaining aspect ratio
-        const imgWidth = pageWidth - 20;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        // If image height is greater than page height, scale down
-        if (imgHeight > pageHeight - 20) {
-            const scale = (pageHeight - 20) / imgHeight;
-            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth * scale, pageHeight - 20, undefined, 'FAST');
-        } else {
-            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight, undefined, 'FAST');
-        }
-
-        // Save PDF
-        const pdfBlob = pdf.output('blob');
-        const file = new File([pdfBlob], 'Payment_Receipt.pdf', { type: 'application/pdf' });
 
         // Show Share button
         const shareBtn = document.getElementById('sharePdf');
