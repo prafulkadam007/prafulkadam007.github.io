@@ -70,26 +70,23 @@ document.getElementById('receiptForm').addEventListener('submit', async function
         
         document.getElementById('receipt').style.display = 'block';
 
-        // Check if running on mobile
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        // Adjust settings based on device
-        const scaleValue = isMobile ? 1 : 1.5;
-        
         // Generate PDF with proper scaling
         const receipt = document.getElementById('receipt');
         const { jsPDF } = window.jspdf;
 
+        // Check if mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
         html2canvas(receipt, {
-            scale: 2, // Increased scale for better quality
+            scale: isMobile ? 3 : 2, // Higher scale for mobile
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff',
             width: receipt.offsetWidth,
             height: receipt.offsetHeight,
-            windowWidth: 900 // Force wider canvas
+            windowWidth: isMobile ? 1200 : 900 // Wider canvas for mobile
         }).then(canvas => {
-            const imgData = canvas.toDataURL('image/jpeg', 1.0); // Increased quality
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -99,12 +96,12 @@ document.getElementById('receiptForm').addEventListener('submit', async function
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
             
-            // Calculate dimensions to use full page width with margins
-            const margin = 10; // 10mm margin
+            // Use almost full page width
+            const margin = 5; // Reduced margin for mobile
             const imgWidth = pageWidth - (margin * 2);
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             
-            // Center the image if it's shorter than page height
+            // Center vertically
             const yPosition = imgHeight < (pageHeight - (margin * 2)) 
                 ? (pageHeight - imgHeight) / 2 
                 : margin;
