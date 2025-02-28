@@ -91,113 +91,208 @@
       background-color: #45a049;
     }
     #receipt {
-      max-width: 800px;
-      margin: 20px auto;
+      width: 595px;
+      padding: 15px 35px 15px 15px;
       background: white;
-      padding: 20px;
-      font-size: 12px;
-      line-height: 1.3;
+      font-size: 11px;
+      line-height: 1.2;
+      box-sizing: border-box;
     }
     .org-header {
-      text-align: left;
-      margin-bottom: 15px;
       display: flex;
-      align-items: flex-start;
-      gap: 15px;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 10px;
+      margin-right: 20px;
+      position: relative;
     }
     .org-logo {
       width: 80px;
       height: auto;
-      margin-top: 5px;
+      margin-left: 25px;
+      flex-shrink: 0;
     }
     .org-details {
-      flex: 1;
+      flex-grow: 1;
       text-align: center;
+      padding-right: 25px;
+      transform: translateX(-5%);
+      margin-right: 15px;
     }
     .org-details h1 {
-      margin: 0 0 2px 0;
-      font-size: 20px;
+      font-size: 18px;
+      margin: 0 0 3px 0;
+      text-align: center;
+      padding-right: 15px;
+      font-weight: bold;
     }
     .org-details p {
-      margin: 1px 0;
-      font-size: 12px;
-      line-height: 1.2;
+      margin: 0;
+      font-size: 9.5px;
+      line-height: 1.3;
+    }
+    .org-details p + p {
+      margin-top: 1px;
     }
     .receipt-title {
       text-align: center;
-      margin: 15px 0;
-      text-decoration: underline;
       font-weight: bold;
+      margin: 15px 0;
+      font-size: 14px;
+      text-decoration: underline;
+      transform: translateX(-5%);
+      padding-right: 15px;
+    }
+    .receipt-content {
+      margin-bottom: 15px;
+      padding-right: 15px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .receipt-row {
+      margin-bottom: 0px;
       display: flex;
-      margin-bottom: 8px;
-      align-items: flex-start;
-    }
-    .receipt-row.date-row {
-      justify-content: space-between;
-      width: 100%;
+      align-items: baseline;
     }
     .receipt-label {
-      min-width: 180px;
-      font-weight: bold;
+      min-width: 170px;
+      padding-right: 3px;
+      font-weight: 600;
+      font-size: 12px;
     }
     .receipt-value {
-      flex: 1;
+      margin: 0;
+      font-size: 12px;
+      line-height: 1;
+      padding-right: 10px;
     }
-    .terms-conditions {
-      margin-top: 15px;
-      font-size: 11px;
+    .terms {
+      margin: 12px 0;
+      font-size: 6.5px;
+      color: #000000;
+      padding-right: 15px;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .terms-conditions p {
-      margin: 2px 0;
+    .terms p {
+      margin: 0 0 3px 0;
+      font-weight: bold;
+      font-size: 9.5px;
+      color: #000000;
+    }
+    .terms ul {
+      margin: 0;
+      padding-left: 10px;
+    }
+    .terms li {
+      margin-bottom: 0;
+      line-height: 1;
     }
     .bank-details {
-      margin-top: 15px;
-      font-size: 11px;
-    }
-    .bank-details table {
+      margin: 6px 0;
+      font-size: 7.5px;
       width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 5px;
     }
-    .bank-details td {
+    .bank-row {
       border: 1px solid #000;
-      padding: 3px 5px;
-      font-style: italic;
+      margin-bottom: 3px;
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .bank-details td:first-child {
-      width: 100px;
-    }
-    .bank-details td:not(:last-child) {
+    .bank-cell {
+      padding: 2px 4px;
       border-right: 1px solid #000;
+      white-space: nowrap;
+      color: #000000;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    .bank-cell:last-child {
+      border-right: none;
     }
     .footer {
-      margin-top: 15px;
-      font-size: 11px;
       text-align: center;
+      margin: 15px 0;
+      font-size: 6.5px;
+      width: 100%;
+    }
+    .footer p {
+      margin: 0;
+      line-height: 1;
     }
     .signature {
       text-align: right;
-      margin-top: 20px;
+      margin-top: 18px;
+      font-size: 6.5px;
+      padding-right: 15px;
+      width: 100%;
+      box-sizing: border-box;
     }
-    #sharePdf {
-      display: none;
-      margin-top: 20px;
-      background: #28a745;
+    .signature p {
+      margin: 0;
+      line-height: 1;
     }
-    #sharePdf:hover {
-      background: #218838;
+    #displayName,
+    #displayAddress,
+    #displayAmount,
+    #displayAmountWords,
+    #displayIdNumber {
+      font-size: 12px;
+      font-weight: 500;
     }
-    @media (max-width: 768px) {
-      .form-container {
-        padding: 10px;
-      }
-      .form-group input,
-      .form-group select {
-        font-size: 12px;
-        height: 30px;
-      }
+    .terms-section {
+      font-size: 6px;
+      line-height: 0.9;
+      color: #666666;
+    }
+    .receipt-header {
+      margin-bottom: 20px;
+    }
+    .receipt-content div {
+      margin-bottom: 8px;
+    }
+    .receipt-footer {
+      margin-top: 30px;
+      text-align: right;
+    }
+    .header-info {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 0 12px 0;
+      gap: 20px;
+    }
+    .header-info .receipt-row {
+      margin: 0;
+      flex: 1;
+    }
+    .tax-details {
+      font-size: 8px;
+      line-height: 1;
+    }
+    .bottom-content {
+      color: #666666;
+      font-size: 7px;
+    }
+    .bank-section {
+      margin-top: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      padding-right: 15px;
+    }
+    .bank-title {
+      font-size: 9.5px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    .section-spacer {
+      margin: 6px 0;
+    }
+    .bank-row + .bank-row {
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -260,128 +355,125 @@
 
   <div id="receipt" style="display:none;">
     <div class="org-header">
-      <img src="logo.png" 
-           alt="Organization Logo" 
-           class="org-logo"
-           id="orgLogo">
-      <div class="org-details">
-        <h1>BHARAT CHARITY</h1>
-        <p>(Registered Public Charitable Trust)</p>
-        <p>Ajanta Shopping Centre, Ring Road, Surat</p>
-        <p>State Name: Gujarat, Code: 24</p>
-        <p>CIN: U85511GJ2023NPL207207</p>
-        <p>Contact: 99789-18369</p>
-        <p>E-Mail: charity@bharat.org</p>
-      </div>
+        <img id="orgLogo" src="logo.png" alt="Organization Logo" class="org-logo">
+        <div class="org-details">
+            <h1>BHARAT CHARITY</h1>
+            <p>(Registered Public Charitable Trust)</p>
+            <p>Ajanta Shopping Centre, Ring Road, Surat</p>
+            <p>State Name: Gujarat, Code: 24</p>
+            <p>CIN: U85511GJ2023NPL207207</p>
+            <p>Contact: 99789-18369 | E-Mail: charity@bharat.org</p>
+        </div>
     </div>
 
-    <div class="receipt-title">
-      DONATION RECEIPT
+    <div class="receipt-title">DONATION RECEIPT</div>
+    
+    <div class="header-info">
+        <div class="receipt-row">
+            <div class="receipt-label">Receipt No:</div>
+            <div class="receipt-value" id="displayReceiptNo"></div>
+        </div>
+        <div class="receipt-row">
+            <div class="receipt-label">Dated:</div>
+            <div class="receipt-value" id="displayDate"></div>
+        </div>
     </div>
 
     <div class="receipt-content">
-      <div class="receipt-row date-row">
-        <div style="display: flex;">
-          <div class="receipt-label">Receipt No:</div>
-          <div class="receipt-value" id="displayReceiptNo"></div>
+        <div class="receipt-row">
+            <div class="receipt-label">RECEIVED with thanks from:</div>
+            <div class="receipt-value" id="displayName"></div>
         </div>
-        <div style="display: flex;">
-          <div class="receipt-label">Dated:</div>
-          <div class="receipt-value" id="displayDate"></div>
+
+        <div class="receipt-row">
+            <div class="receipt-label">Address:</div>
+            <div class="receipt-value" id="displayAddress"></div>
         </div>
-      </div>
-      
-      <div class="receipt-row">
-        <div class="receipt-label">RECEIVED with thanks from:</div>
-        <div class="receipt-value" id="displayName"></div>
-      </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">Address:</div>
-        <div class="receipt-value" id="displayAddress"></div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">bearing ID No and Type:</div>
+            <div class="receipt-value"><span id="displayIdNumber"></span> (<span id="displayIdType"></span>)</div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">bearing ID No and Type:</div>
-        <div class="receipt-value"><span id="displayIdNumber"></span> (<span id="displayIdType"></span>)</div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">the sum of ₹:</div>
+            <div class="receipt-value" id="displayAmount"></div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">the sum of ₹:</div>
-        <div class="receipt-value" id="displayAmount"></div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">in words:</div>
+            <div class="receipt-value">INR <span id="displayAmountWords"></span> Only.</div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">in words:</div>
-        <div class="receipt-value" id="displayAmountWords"></div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">towards:</div>
+            <div class="receipt-value" id="displayTowards"></div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">towards:</div>
-        <div class="receipt-value" id="displayTowards"></div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">by mode of:</div>
+            <div class="receipt-value" id="displayPaymentMode"></div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">by mode of:</div>
-        <div class="receipt-value" id="displayPaymentMode"></div>
-      </div>
+        <div class="receipt-row" id="transactionRow">
+            <div class="receipt-value" id="displayTransactionDetails"></div>
+        </div>
 
-      <div class="receipt-row small-text" id="displayTransactionDetails"></div>
+        <div class="receipt-row">
+            <div class="receipt-label">Remarks:</div>
+            <div class="receipt-value" id="displayRemarks"></div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">Remarks:</div>
-        <div class="receipt-value" id="displayRemarks"></div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">eligible for deduction under section:</div>
+            <div class="receipt-value">Section 80G of the Income Tax Act, 1961.</div>
+        </div>
 
-      <div class="receipt-row">
-        <div class="receipt-label">eligible for deduction under section:</div>
-        <div class="receipt-value">Section 80G of the Income Tax Act, 1961.</div>
-      </div>
-
-      <div class="receipt-row">
-        <div class="receipt-label">Our Income Tax Unique Registration No u/s 80G(5) & date:</div>
-        <div class="receipt-value">AABTB7845JE20231 1-Apr-23</div>
-      </div>
+        <div class="receipt-row">
+            <div class="receipt-label">Our Income Tax Unique Registration No u/s 80G(5) & date:</div>
+            <div class="receipt-value">AABTB7845JE20231 1-Apr-23</div>
+        </div>
     </div>
 
-    <div class="terms-conditions">
-      <p>Terms & Conditions</p>
-      <p>* Cheque or DD is subject to realisation.</p>
-      <p>* This Receipt is exempt from levy of StampDuty vide Exemption (b) of Article 53 in Schedule 1 of 'The Indian Stamp Act, 1899'.</p>
-      <p>* Our Registration No is GUJ/SUR/2023/471</p>
-      <p>* Our Income Tax PAN is AABTB7845J</p>
-      <p>* Our Income Tax Unique Registration No (URN) u/s 12A is AABTB7845JF20231 dated 1-Apr-23</p>
-      <p>* Our FCRA Registration No is 65478945</p>
-      <p>* Our CSR Registration No is 987654321</p>
+    <div class="terms">
+        <p>Terms & Conditions</p>
+        <ul>
+            <li>Cheque or DD is subject to realisation.</li>
+            <li>This Receipt is exempt from levy of StampDuty vide Exemption (b) of Article 53 in Schedule 1 of 'The Indian Stamp Act, 1899'.</li>
+            <li>Our Registration No is GUJ/SUR/2023/471</li>
+            <li>Our Income Tax PAN is AABTB7845J</li>
+            <li>Our Income Tax Unique Registration No (URN) u/s 12A is AABTB7845JF20231 dated 1-Apr-23</li>
+            <li>Our FCRA Registration No is 65478945</li>
+            <li>Our CSR Registration No is 987654321</li>
+        </ul>
     </div>
 
-    <div class="bank-details">
-      <table>
-        <tr>
-          <td>Bank Details</td>
-          <td>Bank Name:Kotak Bank</td>
-          <td>Account No:9978918369</td>
-          <td>Branch & IFSC:Surat & KKBK0002870</td>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <td>Bank Details (Foreign Contribution)</td>
-          <td>Bank Name:SBI</td>
-          <td>Account No:123456789</td>
-          <td>Branch & IFSC:Surat & SBIN0099165</td>
-        </tr>
-      </table>
+    <div class="bank-section">
+        <div class="bank-details">
+            <div class="bank-row">
+                <div class="bank-cell">Bank Details</div>
+                <div class="bank-cell">Bank Name:Kotak Bank</div>
+                <div class="bank-cell">Account No:9978918369</div>
+                <div class="bank-cell">Branch & IFSC:Surat & KKBK0002870</div>
+            </div>
+            <div class="bank-row">
+                <div class="bank-cell">Bank Details (Foreign Contribution)</div>
+                <div class="bank-cell">Bank Name:SBI</div>
+                <div class="bank-cell">Account No:123456789</div>
+                <div class="bank-cell">Branch & IFSC:Surat & SBIN0099165</div>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">
-      <p>This is a Computer Generated Receipt</p>
-      <p>Thank You for the Donation</p>
-    </div>
-    
-    <div class="signature">
-      <p>For BHARAT CHARITY</p>
-      <p>Trustee / Authorized Signatory</p>
+    <div class="bottom-section">
+        <div class="footer">
+            <p>This is a Computer Generated Receipt</p>
+            <p>Thank You for the Donation</p>
+        </div>
+        <div class="signature">
+            <p>For BHARAT CHARITY</p>
+            <p>Trustee / Authorized Signatory</p>
+        </div>
     </div>
   </div>
 

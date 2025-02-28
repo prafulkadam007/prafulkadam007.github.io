@@ -21,134 +21,92 @@ function convertNumberToWords(amount) {
 document.getElementById('receiptForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
+    // Wait for logo to load
+    const logoImg = document.getElementById('orgLogo');
+    await new Promise((resolve) => {
+        if (logoImg.complete) {
+            resolve();
+        } else {
+            logoImg.onload = resolve;
+        }
+    });
+
+    const formData = {
+        receiptNo: document.getElementById('receiptNo').value,
+        name: document.getElementById('name').value,
+        address: document.getElementById('address').value,
+        idType: document.getElementById('idType').value,
+        idNumber: document.getElementById('idNumber').value,
+        amount: document.getElementById('amount').value,
+        towards: 'Donation',
+        paymentMode: document.getElementById('paymentMode').value,
+        transactionDetails: document.getElementById('paymentMode').value === 'Online' 
+            ? document.getElementById('transactionDetails').value 
+            : '',
+        remarks: document.getElementById('remarks').value,
+        date: new Date(document.getElementById('date').value).toLocaleDateString('en-IN')
+    };
+
+    // Populate receipt div
+    document.getElementById('displayReceiptNo').textContent = formData.receiptNo;
+    document.getElementById('displayDate').textContent = formData.date;
+    document.getElementById('displayName').textContent = formData.name;
+    document.getElementById('displayAddress').textContent = formData.address;
+    document.getElementById('displayIdType').textContent = formData.idType;
+    document.getElementById('displayIdNumber').textContent = formData.idNumber;
+    document.getElementById('displayAmount').textContent = formData.amount;
+    document.getElementById('displayAmountWords').textContent = convertNumberToWords(parseFloat(formData.amount));
+    document.getElementById('displayTowards').textContent = formData.towards;
+    document.getElementById('displayPaymentMode').textContent = formData.paymentMode;
+    document.getElementById('displayTransactionDetails').textContent = formData.transactionDetails;
+    document.getElementById('displayRemarks').textContent = formData.remarks;
+
+    document.getElementById('receipt').style.display = 'block';
+
+    // Generate PDF
+    const receipt = document.getElementById('receipt');
+    const { jsPDF } = window.jspdf;
+
     try {
-        // Show loading state
-        const submitButton = e.target.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-        submitButton.innerHTML = 'Generating...';
-        submitButton.disabled = true;
-
-        // Wait for logo to load
-        const logoImg = document.getElementById('orgLogo');
-        await new Promise((resolve) => {
-            if (logoImg.complete) {
-                resolve();
-            } else {
-                logoImg.onload = resolve;
-            }
-        });
-
-        const formData = {
-            receiptNo: document.getElementById('receiptNo').value,
-            name: document.getElementById('name').value,
-            address: document.getElementById('address').value,
-            idType: document.getElementById('idType').value,
-            idNumber: document.getElementById('idNumber').value,
-            amount: document.getElementById('amount').value,
-            towards: 'Donation',
-            paymentMode: document.getElementById('paymentMode').value,
-            transactionDetails: document.getElementById('paymentMode').value === 'Online' 
-                ? document.getElementById('transactionDetails').value 
-                : '',
-            remarks: document.getElementById('remarks').value,
-            date: new Date(document.getElementById('date').value).toLocaleDateString('en-IN')
-        };
-
-        // Populate receipt div
-        document.getElementById('displayReceiptNo').textContent = formData.receiptNo;
-        document.getElementById('displayDate').textContent = formData.date;
-        document.getElementById('displayName').textContent = formData.name;
-        document.getElementById('displayAddress').textContent = formData.address;
-        document.getElementById('displayIdType').textContent = formData.idType;
-        document.getElementById('displayIdNumber').textContent = formData.idNumber;
-        document.getElementById('displayAmount').textContent = formData.amount;
-        document.getElementById('displayAmountWords').textContent = convertNumberToWords(parseFloat(formData.amount));
-        document.getElementById('displayTowards').textContent = formData.towards;
-        document.getElementById('displayPaymentMode').textContent = formData.paymentMode;
-        document.getElementById('displayTransactionDetails').textContent = formData.transactionDetails;
-        document.getElementById('displayRemarks').textContent = formData.remarks;
-        
-        document.getElementById('receipt').style.display = 'block';
-
-        // Generate PDF with proper scaling
-        const receipt = document.getElementById('receipt');
-        const { jsPDF } = window.jspdf;
-
-        // Check if mobile device
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
-        html2canvas(receipt, {
-            scale: isMobile ? 3 : 2, // Higher scale for mobile
+        const canvas = await html2canvas(receipt, {
+            scale: 2,
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff',
-            width: receipt.offsetWidth,
-            height: receipt.offsetHeight,
-            windowWidth: isMobile ? 1200 : 900 // Wider canvas for mobile
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/jpeg', 1.0);
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
-            
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            
-            // Use almost full page width
-            const margin = 5; // Reduced margin for mobile
-            const imgWidth = pageWidth - (margin * 2);
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
-            // Center vertically
-            const yPosition = imgHeight < (pageHeight - (margin * 2)) 
-                ? (pageHeight - imgHeight) / 2 
-                : margin;
-            
-            pdf.addImage(imgData, 'JPEG', margin, yPosition, imgWidth, imgHeight);
-            pdf.save('Payment_Receipt.pdf');
+            width: 595, // A4 width in pixels at 72 DPI
+            height: 842, // A4 height in pixels at 72 DPI
+            windowWidth: 595,
+            windowHeight: 842
         });
 
-        // Show Share button
-        const shareBtn = document.getElementById('sharePdf');
-        shareBtn.style.display = 'block';
-
-        // Handle sharing
-        shareBtn.addEventListener('click', async () => {
-            try {
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: 'Payment Receipt',
-                        text: 'Here is your payment receipt.',
-                        files: [file]
-                    });
-                } else if (isMobile) {
-                    // Fallback for mobile devices that don't support file sharing
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(pdfBlob);
-                    link.download = 'Payment_Receipt.pdf';
-                    link.click();
-                } else {
-                    pdf.save('Payment_Receipt.pdf');
-                }
-            } catch (err) {
-                console.error('Error sharing the PDF:', err);
-                alert('Could not share the PDF. It will be downloaded instead.');
-                pdf.save('Payment_Receipt.pdf');
-            }
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
         });
+        
+        // Use entire A4 page with small margins
+        const margin = 10;
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        pdf.addImage(
+            imgData, 
+            'JPEG', 
+            margin, // x
+            margin, // y
+            pdfWidth - (margin * 2), // width
+            pdfHeight - (margin * 2), // height
+            undefined, 
+            'FAST'
+        );
 
-        // Download PDF
         pdf.save('Payment_Receipt.pdf');
 
     } catch (error) {
-        console.error('Error generating PDF:', error);
-        alert('There was an error generating the PDF. Please try again.');
-    } finally {
-        // Reset button state
-        submitButton.innerHTML = originalButtonText;
-        submitButton.disabled = false;
+        console.error('PDF generation error:', error);
+        alert('Failed to generate PDF. Please try again.');
     }
 });
 
